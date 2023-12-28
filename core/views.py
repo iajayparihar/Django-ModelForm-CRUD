@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .forms import userForms
 from .models import userModel
 
@@ -18,15 +18,13 @@ def index(request):
 
 def updatee(request,id):
     data = userModel.objects.get(id = id)
-    userModel.objects.filter(id=id).delete()
     form = userForms(instance=data)
     if request.method == 'POST':
         form = userForms(request.POST,instance=data)
         if form.is_valid():
             form.save()
             return redirect('/')
-    return render(request,'update.html',{'form':form})
-
+    return render(request,'update.html',{'form':form,'data':id})
 
 
 def delete(request,id):
